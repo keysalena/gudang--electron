@@ -32,7 +32,7 @@
               <div>
                 <div class="d-flex">
                   <button class="btn btn-md btn-success" data-toggle="modal" data-target="#tambahModal">Tambah</button>
-                  <button class="btn btn-info ml-2">Print</button>
+                  <!-- <button class="btn btn-info ml-2">Print</button> -->
                 </div>
               </div>
             </div>
@@ -53,7 +53,7 @@
                       </div>
                     </div>
                     <div class="mb-3">
-                      <input type="date" class="form-control" id="tanggal" name="tanggal" placeholder="Tanggal">
+                      <input type="date" class="form-control" id="tgl" name="tgl" placeholder="Tanggal">
                     </div>
                     <div class="mb-3">
                       <input type="number" class="form-control" id="stok" name="stok" placeholder="Stok">
@@ -105,8 +105,7 @@
     </div>
   </div> -->
   <script>
-   document.addEventListener("DOMContentLoaded", () => {
-  const tambahModal = document.getElementById("tambahModal");
+
   const barangDropdown = document.querySelector("select[name='barang_id']");
 
   const apiUrl = "http://127.0.0.1:8000/api/barangs";
@@ -132,7 +131,7 @@
           // Loop melalui data dan tambahkan opsi ke dropdown
           data.forEach((barang) => {
             const option = document.createElement("option");
-            option.value = barang.name_barang; // Gunakan name_barang sebagai nilai opsi
+            option.value = barang.id; // Gunakan name_barang sebagai nilai opsi
             option.textContent = barang.name_barang;
             barangDropdown.appendChild(option);
           });
@@ -146,49 +145,41 @@
   // Panggil fungsi untuk mengisi dropdown saat halaman dimuat
   populateBarangDropdown();
 
-  // Handle form submission
-  const tambahForm = document.querySelector("form[name='tambahForm']");
-  tambahForm.addEventListener("submit", (event) => {
-    event.preventDefault();
+  const createBarangForm = document.getElementById("createBarangForm");
+  createBarangForm.addEventListener("submit", async (event) => {
+                        event.preventDefault();
+
 
     // Dapatkan data dari formulir
-    const selectedBarang = barangDropdown.value;
-    const tanggal = document.querySelector("input[name='tanggal']").value;
-    const stok = document.querySelector("input[name='stok']").value;
+    const barang_id = barangDropdown.value;
+    const tgl = document.getElementById("tgl").value;
+    const stok = document.getElementById("stok").value;
 
-    // Buat objek data yang akan dikirimkan ke server
-    const data = {
-      name_barang: selectedBarang,
-      tanggal: tanggal,
-      stok: stok,
-    };
+    const formData = new FormData();
+                        formData.append("barang_id", barang_id);
+                        formData.append("tgl", tgl);
+                        formData.append("stok", stok);
 
-    // Kirim data ke API Anda, lalu lakukan sesuai dengan proses yang diperlukan
-    fetch("URL_API_ANDA", {
-      method: "POST", // Metode HTTP yang sesuai dengan API Anda
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${authToken}`,
-      },
-      body: JSON.stringify(data),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        return response.json();
-      })
-      .then((result) => {
-        // Handle respons sesuai kebutuhan Anda
-        console.log("Data berhasil ditambahkan:", result);
-        tambahModal.style.display = "none"; // Tutup modal setelah berhasil tambah data
-        // Lakukan sesuatu, seperti memuat ulang data di tabel
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
-  });
-});
+                        try {
+                            const response = await fetch("http://127.0.0.1:8000/api/masuks", {
+                                method: "POST",
+                                body: formData,
+                                headers: {
+                                    "Authorization": `Bearer ${authToken}`
+                                },
+                            });
+
+                            if (response.ok) {
+                                console.log("Data berhasil ditambahkan.");
+                                window.location.href = "masuk.html";
+
+                            } else {
+                                console.error("Gagal menambahkan data.");
+                            }
+                        } catch (error) {
+                            console.error("Error:", error);
+                        }
+                    });
 
 
   </script>

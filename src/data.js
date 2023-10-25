@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", () => {
         );
       }
       // Make a fetch request to send the updated data to the server
-      const updateUrl = `http://127.0.0.1:8000/api/barangs/${barang.barang_id}`;
+      const updateUrl = `http://127.0.0.1:8000/api/barangs/${barang.id}`;
 
       const requestOptions = {
         method: "POST", // You may want to change this to PUT or PATCH depending on your server API.

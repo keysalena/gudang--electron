@@ -11,12 +11,12 @@ let mainWindow; // Variable for the main window
 const createMainWindow = () => {
   // Create the main browser window with the specified size.
   mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 1200,
+    height: 800,
   });
 
   // Load the main index.html file.
-  mainWindow.loadFile(path.join(__dirname, "login.html"));
+  mainWindow.loadFile(path.join(__dirname, "data.html"));
 
   // Open the DevTools (for debugging) - You can remove this if not needed.
 //  mainWindow.webContents.openDevTools();
